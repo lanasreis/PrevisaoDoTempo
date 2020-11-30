@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-bookmarks',
-  templateUrl: './bookmarks.page.html',
-  styleUrls: ['./bookmarks.page.scss']
+  templateUrl: './bookmarks.component.html',
+  styleUrls: ['./bookmarks.component.scss']
 })
-export class BookmarksPage implements OnInit {
+export class BookmarksComponent implements OnInit {
 
   constructor() { }
 

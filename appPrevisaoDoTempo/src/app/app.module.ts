@@ -12,10 +12,12 @@ import { BookmarksModule } from './pages/bookmarks/bookmarks.module';
 import { environment } from 'src/environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
+import { BookmarksComponent } from './src/app/pages/bookmarks/containers/bookmarks/bookmarks.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BookmarksComponent
   ],
   imports: [
     BrowserModule,

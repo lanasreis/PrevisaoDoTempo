@@ -1,20 +1,42 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators'
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators'
 
 import { environment } from 'src/environments/environment';
-import { CityWeather } from '../models/weather.model';
-import { responseToCityWeather } from '../utils/response.utils';
+import { CityDailyWeather, CityWeather } from '../models/weather.model';
+import { AppState } from '../state/app.reducer';
+import { responseToCityDailyWeather, responseToCityWeather } from '../utils/response.utils';
+
+import * as fromConfigSelectors from '../state/config/config.selectors'
+import { Units } from '../models/units.enum';
 
 @Injectable({
   providedIn: 'root'
 })
-export class WeatherService {
+export class WeatherService implements OnDestroy {
 
-  constructor(private http: HttpClient) {
+  private unit: Units
 
+  private serviceDestroyed$ = new Subject()
+
+  constructor(private http: HttpClient,
+              private store: Store<AppState>) {
+
+    store
+      .pipe(
+        select(fromConfigSelectors.selectUnitConfig),
+        takeUntil(this.serviceDestroyed$)
+      )
+      .subscribe((unit: Units) => this.unit = unit)
+
+  }
+
+  ngOnDestroy(){
+    this.serviceDestroyed$.next();
+    this.serviceDestroyed$.subscribe();
   }
 
   getCityWeatherByQuery(query: string): Observable<CityWeather>{
@@ -22,6 +44,32 @@ export class WeatherService {
     return this.doGet('weather', params)
         .pipe(map(response => responseToCityWeather(response)));
   }
+
+  getCityWeatherById(id: string): Observable<CityWeather>{
+    const params = new HttpParams({ fromObject: {id}});
+    return this.doGet<any>('weather', params)
+      .pipe(map(response => responseToCityWeather(response)))
+  }
+
+  getCityWeatherByCoord(lat: number, lon: number): Observable<CityWeather>{
+    const params = new HttpParams({fromObject: {
+      lat: lat.toString(),
+      lon:lon.toString()
+    }})
+    return this.doGet<any>('weather', params)
+      .pipe(map(response => responseToCityWeather(response)))
+  }
+
+  getCityDetails(lat: number, lon: number): Observable<CityDailyWeather>{
+    const params = new HttpParams({fromObject: {
+      lat: lat.toString(),
+      lon:lon.toString(),
+      exclude: 'minutely, hourly'
+    }})
+    return this.doGet<any>('onecall', params)
+      .pipe(map(response => responseToCityDailyWeather(response)))
+  }
+
 
   private doGet<T>(url: string, params: HttpParams): Observable<T> {
     params = params.append('appid', environment.apiKey);
