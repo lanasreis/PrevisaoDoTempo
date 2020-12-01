@@ -43,4 +43,8 @@ export class BookmarksPage implements OnInit, OnDestroy {
   removeBookmark(id: number){
     this.store.dispatch(fromBookmarksActions.removeBookmark({ id }))
   }
+
+  getBookmark(bookmark: Bookmark){
+    console.log(bookmark)
+  }
 }

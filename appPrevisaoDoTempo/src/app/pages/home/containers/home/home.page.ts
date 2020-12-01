@@ -44,7 +44,6 @@ export class HomePage implements OnInit, OnDestroy {
     this.searchControl = new FormControl('', Validators.required)
           
     this.cityWeather$ = this.store.pipe(select(fromhomeSelectors.selectCurrentWeather));
-
     this.cityWeather$
               .pipe(takeUntil(this.componentDestroyed$))
               .subscribe(value => this.cityWeather = value);

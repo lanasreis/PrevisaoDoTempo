@@ -10,20 +10,22 @@ import { homeReducer } from './state/home.reducer';
 import { HomeEffects } from './state/home.effects';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
 import { CurrentWeatherComponent } from './components/current-weather/current-weather.component';
+import { RouterModule } from '@angular/router';
 
 
 
 @NgModule({
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    StoreModule.forFeature('home', homeReducer),
+    EffectsModule.forFeature([HomeEffects]),
+    ComponentsModule
+  ],
   declarations: [
     HomePage, 
     CurrentWeatherComponent
   ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    StoreModule.forFeature('home', homeReducer),
-    EffectsModule.forFeature([HomeEffects]),
-    ComponentsModule
-  ]
 })
 export class HomeModule { }

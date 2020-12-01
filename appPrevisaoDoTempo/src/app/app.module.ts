@@ -12,12 +12,11 @@ import { BookmarksModule } from './pages/bookmarks/bookmarks.module';
 import { environment } from 'src/environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
-import { BookmarksComponent } from './src/app/pages/bookmarks/containers/bookmarks/bookmarks.component';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BookmarksComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +27,9 @@ import { BookmarksComponent } from './src/app/pages/bookmarks/containers/bookmar
     HttpClientModule,
     StoreModule.forRoot({}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production}),
-    EffectsModule.forRoot([])
+    EffectsModule.forRoot([]),
+    StoreRouterConnectingModule.forRoot(),
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

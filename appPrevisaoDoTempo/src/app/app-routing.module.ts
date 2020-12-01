@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { BookmarksPage } from './pages/bookmarks/bookmarks.page';
+import { BookmarksPage } from './pages/bookmarks/containers/bookmarks/bookmarks.page';
 import { HomePage } from '../app/pages/home/containers/home/home.page';
+import { DetailsPage } from './pages/details/containers/details/details.page';
 
 const routes: Routes = [
   {
@@ -9,7 +10,12 @@ const routes: Routes = [
   },
   {
     path: 'bookmarks', component: BookmarksPage
-  }
+  },  
+  { 
+    path: 'details', 
+    loadChildren: () => import('./pages/details/details.module').then(m => m.DetailsModule) 
+  },
+
 ];
 
 @NgModule({
