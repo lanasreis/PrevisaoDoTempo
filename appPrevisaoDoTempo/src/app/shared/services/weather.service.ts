@@ -71,6 +71,17 @@ export class WeatherService implements OnDestroy {
   }
 
 
+  getWeatherDetails(lat: number, lon: number): Observable<CityDailyWeather> {
+    const params = new HttpParams({fromObject: {
+      lat: lat.toString(),
+      lon: lon.toString(),
+      exclude: 'minutely,hourly',
+    }});
+    return this.doGet<any>('onecall', params)
+      .pipe(map(response => responseToCityDailyWeather(response)));
+  }
+
+
   private doGet<T>(url: string, params: HttpParams): Observable<T> {
     params = params.append('appid', environment.apiKey);
     params = params.append('lang', 'pt_br')
